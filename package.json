@@ -123,5 +123,8 @@
   "devDependencies": {
     "cross-env": "^5.2.0"
   },
+  "output": [
+    "build/**"
+  ],
   "homepage": "/sr012018/xiaoya-pages/last/build"
 }
