@@ -16,7 +16,7 @@ const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 const paths = require('./paths')
 const getClientEnvironment = require('./env')
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin')
-const IgnoreStorePlugin = require('./webpackPlugins/ignore-store-plugin')
+const ReplaceModulePlugin = require('./webpackPlugins/ReplaceModulePlugin')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -445,7 +445,11 @@ module.exports = {
   },
   plugins: [
     // 业务插件，如果项目未发现Store则采用store.temp
-    new IgnoreStorePlugin(),
+    // 业务插件，如果项目未发现Store则采用store.temp
+    new ReplaceModulePlugin([{
+      target: /\/store$/,
+      replace: 'src/store.temp.js'
+    }]),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,

@@ -13,7 +13,7 @@ const getClientEnvironment = require('./env')
 const paths = require('./paths')
 const ManifestPlugin = require('webpack-manifest-plugin')
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin')
-const IgnoreStorePlugin = require('./webpackPlugins/ignore-store-plugin')
+const ReplaceModulePlugin = require('./webpackPlugins/ReplaceModulePlugin')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -355,7 +355,10 @@ module.exports = {
   },
   plugins: [
     // 业务插件，如果项目未发现Store则采用store.temp
-    new IgnoreStorePlugin(),
+    new ReplaceModulePlugin([{
+      target: /\/store$/,
+      replace: 'src/store.temp.js'
+    }]),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
