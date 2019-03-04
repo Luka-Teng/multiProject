@@ -126,5 +126,6 @@
   "output": [
     "build/**"
   ],
+  "publishByFeps":true,
   "homepage": "/sr012018/xiaoya-pages/last/build"
 }

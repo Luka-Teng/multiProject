@@ -1,8 +1,6 @@
 import { configure } from 'mobx'
 import StoreClasses from '@/store'
 
-window.store = StoreClasses
-
 configure({enforceActions: 'observed'})
 
 class Store {
