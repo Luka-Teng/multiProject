@@ -23,7 +23,8 @@ fs.stat(projectDir,(err, stats) => {
   }
 })
 
-const result = {}
-result.project = project
+const result = {
+  project
+}
 
 module.exports = result

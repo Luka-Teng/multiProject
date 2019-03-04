@@ -445,7 +445,6 @@ module.exports = {
   },
   plugins: [
     // 业务插件，如果项目未发现Store则采用store.temp
-    // 业务插件，如果项目未发现Store则采用store.temp
     new ReplaceModulePlugin([{
       target: /\/store$/,
       replace: 'src/store.temp.js'
