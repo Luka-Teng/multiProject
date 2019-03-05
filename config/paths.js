@@ -58,7 +58,7 @@ const findAppHtml = () => {
 module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
-  appBuild: resolveApp('build'),
+  appBuild: resolveApp(path.join('build', concatProjectPath(''))),
   appPublic: resolveApp('public'),
   appHtml: findAppHtml(),
   appIndexJs: resolveApp('src/index.js'),
@@ -69,6 +69,5 @@ module.exports = {
   proxySetup: resolveApp('src/setupProxy.js'),
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
-  servedPath: getServedPath(resolveApp('package.json')),
-  concatProjectPath
+  servedPath: getServedPath(resolveApp('package.json'))
 };
