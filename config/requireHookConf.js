@@ -37,5 +37,10 @@ addHook((code, filename) => {
     code = code.replace(reg, replace)
   }
 
+  if (filename.includes('react-scripts/scripts/utils/verifyTypeScriptSetup.js')) {
+    /* 禁止CRA对项目做TS预检测 */
+    code = `module.exports = () => {}`
+  }
+
   return code
 }, options)
