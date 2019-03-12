@@ -43,5 +43,6 @@
     "pirates": "^4.0.1",
     "react-app-rewired": "^2.1.0",
     "typescript": "^3.3.3333"
-  }
+  },
+  "publishByFeps":true
 }
