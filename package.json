@@ -45,5 +45,8 @@
     "typescript": "^3.3.3333"
   },
   "publishByFeps":true,
-  "homepage": "/sr012018/xiaoya-pages/last/build"
+  "homepage": "/sr012018/xiaoya-pages/last/build",
+  "output": [
+    "build/**"
+  ]
 }

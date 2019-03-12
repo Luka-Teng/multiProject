@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const packageJson = require('../package.json')
 
 const BLACK_LIST = ['router', 'shared', 'store', 'declare', 'template']
 
@@ -30,6 +31,7 @@ try {
 }
 
 process.env['XIAOYA_PROJECT'] = project
+process.env['PUBLIC_URL'] = path.join(packageJson.homepage || '', project)
 
 /**
  * 必须在所有process.env都加载后运行
