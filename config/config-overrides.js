@@ -24,7 +24,7 @@ module.exports = function override(config, env) {
 
   config.plugins.unshift(new ReplaceModulePlugin([{
     target: /\/store$/,
-    replace: 'src/store.temp.js'
+    replace: 'src/template/store.temp.js'
   }]))
 
   const tsIndex = findPlugins(config.plugins, ForkTsCheckerWebpackPlugin)
@@ -32,7 +32,7 @@ module.exports = function override(config, env) {
     config.plugins[tsIndex].compilerOptions = {
       paths: {
         '@/*': ['src/*'],
-        '~/*': [`${process.env['XIAOYA_PROJECT']}/*`]
+        '~/*': [`src/${process.env['XIAOYA_PROJECT']}/*`]
       }
     }
   }

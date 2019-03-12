@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const BLACK_LIST = ['router', 'shared', 'store', 'declare']
+const BLACK_LIST = ['router', 'shared', 'store', 'declare', 'template']
 
 const argv = process.argv.slice(2)
 const project = argv[1]
