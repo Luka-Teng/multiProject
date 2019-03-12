@@ -4,7 +4,7 @@ import {
   HashRouter,
   Switch
 } from 'react-router-dom'
-import routes from '@/routes'
+import routes from '~/routes'
 
 export default class Router extends Component {
   render () {

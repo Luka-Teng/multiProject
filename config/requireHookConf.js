@@ -2,7 +2,6 @@ const { addHook } = require('pirates')
 
 /* 只需要对 react-scripts-ts/config/path 和 react-scripts-ts/config/env 进行拦截 */
 const options = {
-  matcher: /react-scripts\/config\/(paths | env)\.js$/,
   ignoreNodeModules: false
 }
 

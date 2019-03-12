@@ -6,12 +6,14 @@ const {
 const path = require('path')
 const ReplaceModulePlugin = require('./webpackPlugins/ReplaceModulePlugin')
 
-/* 删除原来的ForkTsCheckerWebpackPlugin， 引入自定义的 */
+/* 修改原来的ForkTsCheckerWebpackPlugin， 引入自定义的 */
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin')
-const typescriptFormatter = require('react-dev-utils/typescriptFormatter')
+
+const findPlugins = (plugins, constructor) => {
+  return plugins.findIndex(plugin => plugin instanceof constructor)
+}
 
 module.exports = function override(config, env) {
-  const isEnvProduction = env === 'production'
 
   config = addLessLoader()(config)
   config = addDecoratorsLegacy()(config)
@@ -25,30 +27,15 @@ module.exports = function override(config, env) {
     replace: 'src/store.temp.js'
   }]))
 
-  config.plugins.push(new ForkTsCheckerWebpackPlugin({
-    typescript: require.resolve('typescript'),
-    compilerOptions: {
+  const tsIndex = findPlugins(config.plugins, ForkTsCheckerWebpackPlugin)
+  if (tsIndex >= 0) {
+    config.plugins[tsIndex].compilerOptions = {
       paths: {
         '@/*': ['src/*'],
         '~/*': [`${process.env['XIAOYA_PROJECT']}/*`]
       }
-    },
-    async: !isEnvProduction,
-    useTypescriptIncrementalApi: true,
-    checkSyntacticErrors: true,
-    reportFiles: [
-      '**',
-      '!**/*.json',
-      '!**/__tests__/**',
-      '!**/?(*.)(spec|test).*',
-      '!**/src/setupProxy.*',
-      '!**/src/setupTests.*',
-    ],
-    watch: path.resolve('src'),
-    silent: true,
-    // The formatter is invoked directly in WebpackDevServerUtils during development
-    formatter: isEnvProduction ? typescriptFormatter : undefined,
-  }))
-  console.log(config)
+    }
+  }
+
   return config
 }
