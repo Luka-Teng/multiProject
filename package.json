@@ -1,6 +1,6 @@
 {
   "name": "xiaoya-pages",
-  "version": "0.1.1",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "mobx": "^5.9.0",
