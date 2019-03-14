@@ -4,13 +4,11 @@ const { generate } = require('astring')
 const walk = require('acorn-walk')
 
 /* 解析整段代码 */
-const parse = (sourceCode) => Parser
-  .extend(stage3)
-  .parse
-  .bind(Parser)(sourceCode, {
-    locations: true,
-    ecmaVersion: 2017
-  })
+const parser = Parser.extend(stage3).parse.bind(Parser)
+const parse = (sourceCode) => parser(sourceCode, {
+  locations: true,
+  ecmaVersion: 2017
+})
 
 /* 获取单个node，如果是expressStatement则获取内部expression */
 const getAstNode = (sourceCode) => {
