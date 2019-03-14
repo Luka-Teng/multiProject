@@ -11,7 +11,6 @@ const options = {
  */
 addHook((code, filename) => {
   if (filename.includes('react-scripts/config/paths.js')) {
-    /* 修改paths.js的appBuild属性，使其构建在build/projectName下 */
     const ast = parse(code)
 
     walk.ancestor(ast, {
@@ -20,10 +19,12 @@ addHook((code, filename) => {
         const ancestor = ancestors[ancestors.length - 3]
 
         if (node.key.type === 'Identifier' && isModuleExports(ancestor)) {
+          /* 修改paths.js的appBuild属性，使其构建在build/projectName下 */
           if (node.key.name === 'appBuild') {
             node.value = getAstNode(`resolveApp(\`build/\${process.env['XIAOYA_PROJECT']}\`)`)
           }
 
+          /* 修改paths.js的appHtml属性，使其有自定义HTML能力 */
           if (node.key.name === 'appHtml') {
             node.value = getAstNode(`
               (() => {
