@@ -1,4 +1,5 @@
 const { addHook } = require('pirates')
+const { parse, getAstNode, walkProgram, generate, walk, isModuleExports } = require('./utils')
 
 /* 只需要对 react-scripts-ts/config/path 和 react-scripts-ts/config/env 进行拦截 */
 const options = {
@@ -6,34 +7,58 @@ const options = {
 }
 
 /**
- * TODOLIST
- * 对模块的解析，遍历，返回后续改用AST
+ * 对模块的解析，遍历，修改
  */
 addHook((code, filename) => {
   if (filename.includes('react-scripts/config/paths.js')) {
     /* 修改paths.js的appBuild属性，使其构建在build/projectName下 */
-    const regForAppBuild = /appBuild: resolveApp\('build'\)/g
-    const replaceForAppBuild = `appBuild: resolveApp(\`build/\${process.env['XIAOYA_PROJECT']}\`)`
+    const ast = parse(code)
 
-    /* 修改paths.js的index.html入口 */
-    const regForAppHtml = /appHtml: resolveApp\('public\/index.html'\)/g
-    const replaceForAppHtml = `appHtml: (() => {
-        const projectHtml = resolveApp(path.join('src', process.env['XIAOYA_PROJECT'] || '', 'index.html'))
-        if (fs.existsSync(projectHtml)) {
-          return projectHtml
+    walk.ancestor(ast, {
+      Property: (node, ancestors) => {
+        /* 获取最近的AssiginExpression */
+        const ancestor = ancestors[ancestors.length - 3]
+
+        if (node.key.type === 'Identifier' && isModuleExports(ancestor)) {
+          if (node.key.name === 'appBuild') {
+            node.value = getAstNode(`resolveApp(\`build/\${process.env['XIAOYA_PROJECT']}\`)`)
+          }
+
+          if (node.key.name === 'appHtml') {
+            node.value = getAstNode(`
+              (() => {
+                const projectHtml = resolveApp(path.join('src', process.env['XIAOYA_PROJECT'] || '', 'index.html'))
+                if (fs.existsSync(projectHtml)) {
+                  return projectHtml
+                }
+                return resolveApp('public/index.html')
+              })()
+            `)
+          }
         }
-        return resolveApp('public/index.html')
-      })()`
-      
-    code = code.replace(regForAppBuild, replaceForAppBuild)
-    code = code.replace(regForAppHtml, replaceForAppHtml)
+      }
+    })
+
+    code = generate(ast)
   }
 
   if (filename.includes('react-scripts/config/env.js')) {
     /* 修改env.js，替换环境变量过滤REACT_APP_为XIAOYA_ */
-    const reg = /REACT_APP/g
-    const replace = `XIAOYA`
-    code = code.replace(reg, replace)
+    const ast = parse(code)
+
+    walkProgram(ast, {
+      VariableDeclaration: (node) => {
+        node.declarations.some((declarator) => {
+          if (declarator.id.type === 'Identifier' && declarator.id.name === 'REACT_APP') {
+            declarator.init = getAstNode(`/^XIAOYA_/i`)
+            return true
+          }
+          return false
+        })
+      }
+    })
+
+    code = generate(ast)
   }
 
   if (filename.includes('react-scripts/scripts/utils/verifyTypeScriptSetup.js')) {
