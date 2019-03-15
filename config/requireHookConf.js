@@ -1,5 +1,6 @@
 const { addHook } = require('pirates')
 const { parse, getAstNode, walkProgram, generate, walk, isModuleExports } = require('./utils')
+const { projectName } = require('./const')
 
 /* 只需要对 react-scripts-ts/config/path 和 react-scripts-ts/config/env 进行拦截 */
 const options = {
@@ -21,14 +22,14 @@ addHook((code, filename) => {
         if (node.key.type === 'Identifier' && isModuleExports(ancestor)) {
           /* 修改paths.js的appBuild属性，使其构建在build/projectName下 */
           if (node.key.name === 'appBuild') {
-            node.value = getAstNode(`resolveApp(\`build/\${process.env['XIAOYA_PROJECT']}\`)`)
+            node.value = getAstNode(`resolveApp(\`build/\${process.env['${projectName}_PROJECT']}\`)`)
           }
 
           /* 修改paths.js的appHtml属性，使其有自定义HTML能力 */
           if (node.key.name === 'appHtml') {
             node.value = getAstNode(`
               (() => {
-                const projectHtml = resolveApp(path.join('src', process.env['XIAOYA_PROJECT'] || '', 'index.html'))
+                const projectHtml = resolveApp(path.join('src', process.env['${projectName}_PROJECT'] || '', 'index.html'))
                 if (fs.existsSync(projectHtml)) {
                   return projectHtml
                 }
@@ -51,7 +52,7 @@ addHook((code, filename) => {
       VariableDeclaration: (node) => {
         node.declarations.some((declarator) => {
           if (declarator.id.type === 'Identifier' && declarator.id.name === 'REACT_APP') {
-            declarator.init = getAstNode(`/^XIAOYA_/i`)
+            declarator.init = getAstNode(`/^${projectName}_/i`)
             return true
           }
           return false

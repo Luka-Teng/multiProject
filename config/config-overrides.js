@@ -5,6 +5,7 @@ const {
 } = require('customize-cra')
 const path = require('path')
 const ReplaceModulePlugin = require('./webpackPlugins/ReplaceModulePlugin')
+const { projectName } = require('./const')
 
 /* 修改原来的ForkTsCheckerWebpackPlugin， 引入自定义的 */
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin')
@@ -18,7 +19,7 @@ module.exports = function override(config, env) {
   config = addLessLoader()(config)
   config = addDecoratorsLegacy()(config)
   config = addWebpackAlias({
-    '~': path.resolve('src', process.env['XIAOYA_PROJECT']),
+    '~': path.resolve('src', process.env[`${projectName}_PROJECT`]),
     '@': path.resolve('src')
   })(config)
 
@@ -32,7 +33,7 @@ module.exports = function override(config, env) {
     config.plugins[tsIndex].compilerOptions = {
       paths: {
         '@/*': ['src/*'],
-        '~/*': [`src/${process.env['XIAOYA_PROJECT']}/*`]
+        '~/*': [`src/${process.env[`${projectName}_PROJECT`]}/*`]
       }
     }
   }

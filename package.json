@@ -17,6 +17,7 @@
     "start-prod": "cross-env XIAOYA_API_ENV=production node scripts/run.js start",
     "build-dev": "cross-env XIAOYA_API_ENV=development node scripts/run.js build",
     "build-prod": "cross-env XIAOYA_API_ENV=production node scripts/run.js build",
+    "init": "node scripts/init",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -42,6 +43,8 @@
     "astring": "^1.3.1",
     "cross-env": "^5.2.0",
     "customize-cra": "^0.2.12",
+    "fs-extra": "^7.0.1",
+    "inquirer": "^6.2.2",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "pirates": "^4.0.1",
