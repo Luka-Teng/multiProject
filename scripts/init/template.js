@@ -8,6 +8,8 @@ class Home extends Component {
     return <div>Home</div>
   }
 }
+
+export default Home
 `.trim()
 
 templates['routes/index.js'] = templates['routes/index.tsx'] = `
