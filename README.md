@@ -3,11 +3,11 @@
 
     src/declare: TS类型声明
 
-    src/router: 路由地址
+    src/router: 路由地址
 
     src/shared: 项目贡献文件
 
-    src/store: 项目共享状态
+    src/store: 项目共享状态
 
     src/template: 项目文件模板
 
@@ -29,4 +29,4 @@
 
 3. 开发注意事项
 
-    alias: `@`符号代表地址`src`, `~`符号代表项目目录
+    alias: `@`符号代表地址`src`, `~`符号代表项目目录
